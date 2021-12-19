@@ -1,0 +1,25 @@
+version: '3'
+services:
+  spring_boot_com_postgresql:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    image: spring_boot_com_postgresql
+    ports:
+      - "8080:8080"
+      - "5005:5005"
+    environment:
+      - ADDITIONAL_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=127.0.0.1:5005
+      - PROFILE=dev
+    links:
+      - db
+  db:
+    image: "postgres:14.0-alpine"
+    ports:
+      - "3386:3386"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345678
+      POSTGRES_DB: empresa_db
+    container_name: "PostgresEmpresaDB"
+    restart: always
